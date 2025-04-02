@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Sandbox</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Code Sandbox</h1>
+        
+        <div class="row">
+            <div class="col code-editor">
+                <h2>Execute Python Code</h2>
+                <form id="code-form">
+                    <div class="form-group">
+                        <label for="code">Python Code:</label>
+                        <!-- 添加 pre 和 code 标签包裹 textarea 以实现语法高亮 -->
+                        <textarea id="code" name="code"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sandbox Configuration:</label>
+                        <div class="config-options">
+                            <div>
+                                <label for="cpu_time_limit">CPU Time Limit (s):</label>
+                                <input type="number" id="cpu_time_limit" name="cpu_time_limit" 
+                                       value="{{ default_config.cpu_time_limit }}" min="1">
+                            </div>
+                            <div>
+                                <label for="memory_limit">Memory Limit (MB):</label>
+                                <input type="number" id="memory_limit" name="memory_limit" 
+                                       value="{{ default_config.memory_limit }}" min="16">
+                            </div>
+                            <div>
+                                <label for="timeout">Timeout (s):</label>
+                                <input type="number" id="timeout" name="timeout" 
+                                       value="{{ default_config.timeout }}" min="1">
+                            </div>
+                            <div class="checkboxes">
+                                <label>
+                                    <input type="checkbox" id="allow_network" name="allow_network">
+                                    Allow Network
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="allow_filesystem" name="allow_filesystem">
+                                    Allow Filesystem
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="use_docker" name="use_docker">
+                                    Use Docker
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn">Execute</button>
+                </form>
+                
+                <div id="result-container" class="hidden">
+                    <h3>Execution Result</h3>
+                    <div id="execution-status"></div>
+                    <pre id="execution-result"></pre>
+                    <div id="execution-error" class="error"></div>
+                </div>
+            </div>
+            
+            <div class="col history">
+                <h2>Recent Executions</h2>
+                <div class="history-list">
+                    {% for exec in history %}
+                    <div class="history-item {{ 'error' if exec.status == 'error' else '' }}">
+                        <div class="timestamp">{{ exec.timestamp }}</div>
+                        <div class="code-snippet">{{ exec.code }}</div>
+                        <div class="execution-time">{{ exec.duration }}s</div>
+                        <div class="status">{{ exec.status }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a href="dashboard.html" class="btn">View Dashboard</a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../static/script.js"></script>
+    <script>
+        const editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+            mode: 'python',
+            theme: 'dracula', // 黑色主题
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+            autoCloseBrackets: true,
+            styleActiveLine: true
+        });
+
+        // 表单提交时获取值
+        document.querySelector('form').addEventListener('submit', () => {
+            editor.save(); // 确保内容同步到textarea
+        });
+    </script>
+</body>
+</html>

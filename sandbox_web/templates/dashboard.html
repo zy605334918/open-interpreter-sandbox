@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandbox Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Sandbox Monitoring Dashboard</h1>
+        
+        <div class="dashboard-row">
+            <div class="chart-container">
+                <canvas id="cpuChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="memoryChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="dashboard-row">
+            <div class="security-events">
+                <h2>Security Events</h2>
+                <div id="events-list"></div>
+            </div>
+            
+            <div class="system-stats">
+                <h2>Current System Status</h2>
+                <div id="current-stats">
+                    <div>CPU Usage: <span id="cpu-usage">0</span>%</div>
+                    <div>Memory Usage: <span id="memory-usage">0</span>MB / <span id="memory-total">0</span>MB (<span id="memory-percent">0</span>%)</div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="btn back-btn">Back to Editor</a>
+    </div>
+    
+    <script src="../static/dashboard.js"></script>
+</body>
+</html>
